@@ -6,14 +6,14 @@
 package proofs
 
 import (
-  "bytes"
-  "encoding/base64"
-  "encoding/binary"
-  "errors"
-  "sort"
-  "strings"
+	"bytes"
+	"encoding/base64"
+	"encoding/binary"
+	"errors"
+	"sort"
+	"strings"
 
-  "github.com/miekg/dns"
+	"github.com/miekg/dns"
 )
 
 type SignedSet struct {
@@ -32,26 +32,26 @@ func (p wireSlice) Less(i, j int) bool {
 }
 
 func (ss *SignedSet) Pack() (buf []byte, sig []byte, err error) {
-  sigwire := make([]byte, dns.Len(ss.Sig))
-  off, err := packSigWire(ss.Sig, sigwire)
-  if err != nil {
-    return nil, nil, err
-  }
-  sigwire = sigwire[:off]
+	sigwire := make([]byte, dns.Len(ss.Sig))
+	off, err := packSigWire(ss.Sig, sigwire)
+	if err != nil {
+		return nil, nil, err
+	}
+	sigwire = sigwire[:off]
 
-  rrdata, err := rawSignatureData(ss.Rrs, ss.Sig)
-  if err != nil {
-    return nil, nil, err
-  }
+	rrdata, err := rawSignatureData(ss.Rrs, ss.Sig)
+	if err != nil {
+		return nil, nil, err
+	}
 
-  sigwire = append(sigwire, rrdata...)
+	sigwire = append(sigwire, rrdata...)
 
-  sig, err = base64.StdEncoding.DecodeString(ss.Sig.Signature)
-  if err != nil {
-    return nil, nil, err
-  }
+	sig, err = base64.StdEncoding.DecodeString(ss.Sig.Signature)
+	if err != nil {
+		return nil, nil, err
+	}
 
-  return sigwire, sig, nil
+	return sigwire, sig, nil
 }
 
 // Return the raw signature data.
@@ -179,7 +179,6 @@ func packUint16(i uint16, msg []byte, off int) (off1 int, err error) {
 	binary.BigEndian.PutUint16(msg[off:], i)
 	return off + 2, nil
 }
-
 
 func packUint32(i uint32, msg []byte, off int) (off1 int, err error) {
 	if off+4 > len(msg) {

@@ -15,39 +15,39 @@ import (
 	"strings"
 
 	"github.com/arachnid/dnsprove/oracle"
-    "github.com/relyt29/dnsprove/proveAPI"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/miekg/dns"
 	"github.com/ethereum/go-ethereum/ethclient"
 	log "github.com/inconshreveable/log15"
+	"github.com/miekg/dns"
+	"github.com/relyt29/dnsprove/proveAPI"
 	prompt "github.com/segmentio/go-prompt"
 )
 
 var (
-	hashes          = flag.String("hashes", "SHA256", "a comma-separated list of supported hash algorithms")
-	algorithms      = flag.String("algorithms", "RSASHA256", "a comma-separated list of supported digest algorithms")
-	verbosity       = flag.Int("verbosity", 3, "logging level verbosity (0-4)")
-	print           = flag.Bool("print", false, "don't upload to the contract, just print proof data")
-	rpc             = flag.String("rpc", "http://localhost:8545", "RPC path to Ethereum node")
-	address         = flag.String("address", "", "Contract address for DNSSEC oracle")
-	keyfile         = flag.String("keyfile", "", "Path to JSON keyfile")
-	gasprice        = flag.Float64("gasprice", 5.0, "Gas price, in gwei")
-	yes             = flag.Bool("yes", false, "Do not prompt before sending transactions")
+	hashes       = flag.String("hashes", "SHA256", "a comma-separated list of supported hash algorithms")
+	algorithms   = flag.String("algorithms", "RSASHA256", "a comma-separated list of supported digest algorithms")
+	verbosity    = flag.Int("verbosity", 3, "logging level verbosity (0-4)")
+	print        = flag.Bool("print", false, "don't upload to the contract, just print proof data")
+	rpc          = flag.String("rpc", "http://localhost:8545", "RPC path to Ethereum node")
+	address      = flag.String("address", "", "Contract address for DNSSEC oracle")
+	keyfile      = flag.String("keyfile", "", "Path to JSON keyfile")
+	gasprice     = flag.Float64("gasprice", 5.0, "Gas price, in gwei")
+	yes          = flag.Bool("yes", false, "Do not prompt before sending transactions")
 	trustAnchors = []*dns.DS{
 		&dns.DS{
-			Hdr: dns.RR_Header{Name: ".", Rrtype: dns.TypeDS, Class: dns.ClassINET},
-			KeyTag: 19036,
-			Algorithm: 8,
+			Hdr:        dns.RR_Header{Name: ".", Rrtype: dns.TypeDS, Class: dns.ClassINET},
+			KeyTag:     19036,
+			Algorithm:  8,
 			DigestType: 2,
-			Digest: "49AAC11D7B6F6446702E54A1607371607A1A41855200FD2CE1CDDE32F24E8FB5",
+			Digest:     "49AAC11D7B6F6446702E54A1607371607A1A41855200FD2CE1CDDE32F24E8FB5",
 		},
 		&dns.DS{
-			Hdr: dns.RR_Header{Name: ".", Rrtype: dns.TypeDS, Class: dns.ClassINET},
-			KeyTag: 20326,
-			Algorithm: 8,
+			Hdr:        dns.RR_Header{Name: ".", Rrtype: dns.TypeDS, Class: dns.ClassINET},
+			KeyTag:     20326,
+			Algorithm:  8,
 			DigestType: 2,
-			Digest: "E06D44B80B8F1D39A95C0B0D7C65D08458E880409BBC683457104237C7F8EC8D",
+			Digest:     "E06D44B80B8F1D39A95C0B0D7C65D08458E880409BBC683457104237C7F8EC8D",
 		},
 	}
 )
